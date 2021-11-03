@@ -56,7 +56,7 @@ public class DatabaseFlowers {
     }
     public static void main(String[] args) {
         try {
-            //Return connection instance
+            ///Return connection instance
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("Creating statement...");
