@@ -1,6 +1,7 @@
 package com.company;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class DatabaseFlowers {
     static final String DB_URL = "jdbc:mysql://group-2-database.ckfcq92zr1jy.eu-west-2.rds.amazonaws.com/Flowers";
@@ -10,8 +11,28 @@ public class DatabaseFlowers {
     static Connection conn = null;
     static Statement stmt = null;
 
+
     public static void insertExample() throws SQLException {
-        String sql = "INSERT INTO FlowersInStock(ID,Type,Quantity,Price) VALUES (1,'Rose',34, 3)";
+        Scanner input = new Scanner(System.in);
+        System.out.println("Entry No:");
+        int ID = input.nextInt();
+        System.out.println("Flower Type:");
+        String Type = input.next();
+        System.out.println("Quantity in stock:");
+        int Quantity = input.nextInt();
+        System.out.println("Price (EUR):");
+        double Price = input.nextDouble();
+
+        String sql = "insert into FlowersInStock " + " (ID,Type,Quantity,Price)" + "values (?,?,?,?)";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, ID);
+        stmt.setString(2, Type);
+        stmt.setInt(3, Quantity);
+        stmt.setDouble(4, Price);
+
+        stmt.executeUpdate();
+
+        //String sql = "INSERT INTO FlowersInStock(ID,Type,Quantity,Price, Color) VALUES (2,'Lily',12, 2.10, 'White')";
         System.out.println("Inserted: " + stmt.executeUpdate(sql));
     }
 
@@ -27,11 +48,11 @@ public class DatabaseFlowers {
         //rs.close();
     //}
 
-    public static void insertWithValue(int ID, String Type, int Quantity, int Price) throws SQLException {
-        String sql = "INSERT INTO FlowersInStock(ID,Type,Quantity,Price) VALUES (+" +
-                ID + ",'" + Type + "'," + Quantity + "','" + Price + "')";
-        stmt.execute(sql);
-    }
+   // public static void insertWithValue(int ID, String Type, int Quantity, int Price) throws SQLException {
+    //    String sql = "INSERT INTO FlowersInStock(ID,Type,Quantity,Price,Color) VALUES (+" +
+      //          ID + ",'" + Type + "'," + Quantity + "','" + Price + "')";
+        //stmt.execute(sql);
+    //}
 
     public static void main(String[] args){
         try {
