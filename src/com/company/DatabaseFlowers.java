@@ -1,6 +1,7 @@
 package com.company;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class DatabaseFlowers {
     static final String DB_URL = "jdbc:mysql://group-2-database.ckfcq92zr1jy.eu-west-2.rds.amazonaws.com/Flowers";
@@ -11,29 +12,49 @@ public class DatabaseFlowers {
     static Statement stmt = null;
 
     public static void insertExample() throws SQLException {
-        String sql = "INSERT INTO FlowersInStock(ID,Type,Quantity,Price) VALUES (1,'Rose',34, 3)";
-        System.out.println("Inserted: " + stmt.executeUpdate(sql));
+        Scanner input = new Scanner(System.in);
+        System.out.println("Flower Type:");
+        String Type = input.next();
+        System.out.println("Quantity in stock:");
+        int Quantity = input.nextInt();
+        System.out.println("Price (EUR):");
+        double Price = input.nextDouble();
+
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO FlowersInStock(Type,Quantity,Price) values(?,?,?)");
+        stmt.setString(1, Type);
+        stmt.setInt(2, Quantity);
+        stmt.setDouble(3, Price);
+
+        if (stmt.executeUpdate() != 0) {
+            System.out.println("Inserted");
+        }
+    }
+
+    public static void deleteExample() throws SQLException {
+        String sql = "DELETE FROM FlowersInStock WHERE ID=7";
+        System.out.println("Deleted: " + stmt.executeUpdate(sql));
     }
 
     //public static void selectExample() throws SQLException {
-        //String sql = "SELECT * FROM shoes WHERE ID=123";
-      //  String sql = "SELECT * FROM FlowersInStock";
-        //ResultSet rs = stmt.executeQuery(sql);
+    //String sql = "SELECT * FROM shoes WHERE ID=123";
+    //  String sql = "SELECT * FROM FlowersInStock";
+    //ResultSet rs = stmt.executeQuery(sql);
 
-        //while (rs.next()) {
-          //  System.out.println(rs.getInt("ID") + " " + rs.getString("Type"));
-            //System.out.println(rs.getInt(1) + " " + rs.getString(2));
-        //}
-        //rs.close();
+    //while (rs.next()) {
+    //  System.out.println(rs.getInt("ID") + " " + rs.getString("Type"));
+    //System.out.println(rs.getInt(1) + " " + rs.getString(2));
+    //}
+    //rs.close();
     //}
 
-    public static void insertWithValue(int ID, String Type, int Quantity, int Price) throws SQLException {
-        String sql = "INSERT INTO FlowersInStock(ID,Type,Quantity,Price) VALUES (+" +
-                ID + ",'" + Type + "'," + Quantity + "','" + Price + "')";
-        stmt.execute(sql);
-    }
 
-    public static void main(String[] args){
+    public static void updateExample() throws SQLException {
+        String sql = "UPDATE FlowersInStock\n" +
+                "SET Quantity = 101\n" +
+                "WHERE Type = 'Rose'";
+        System.out.println("Updated: " + stmt.executeUpdate(sql));
+    }
+    public static void main(String[] args) {
         try {
             //Return connection instance
             System.out.println("Connecting to database...");
@@ -42,24 +63,20 @@ public class DatabaseFlowers {
 
             //Create statement object
             stmt = conn.createStatement();
-
+            System.out.println("Please choose desired action: s for Select");
             //selectExample();
-            insertExample();
-            //updateExample();
+            //insertExample();
+            updateExample();
             //deleteExample();
             //joinExample();
-           // insertWithValue('1', "Rose",'1000', '1');
 
         } catch (SQLException sqlException) {
             System.out.println("Error:" + sqlException.getMessage());
-        }
-        finally {
+        } finally {
             try {
                 stmt.close();
                 conn.close();
-            }
-            catch (SQLException ex)
-            {
+            } catch (SQLException ex) {
 
             }
         }
