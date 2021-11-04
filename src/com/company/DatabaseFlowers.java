@@ -1,5 +1,7 @@
 package com.company;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -26,13 +28,40 @@ public class DatabaseFlowers {
         stmt.setDouble(3, Price);
 
         if (stmt.executeUpdate() != 0) {
-            System.out.println("Inserted");
+            System.out.println("Inserted\n");
+        }
+    }
+
+    public static void updateExample() throws SQLException {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Please enter ID No. you want to update quantity in stock:");
+        int ID = input.nextInt();
+        System.out.println("Update quantity in stock:");
+        int Quantity = input.nextInt();
+        //  TRYING TO ESCAPE NEGATIVE NUMBERS.
+        //  while (Quantity<0){
+        //    System.out.println("Incorrect. Try again:");
+        //  input.nextInt();
+        //Quantity = checkQuantity(); ???
+        //}
+
+        PreparedStatement stmt = conn.prepareStatement("UPDATE FlowersInStock SET Quantity = ? WHERE ID = ?");
+        stmt.setInt(1, Quantity);
+        stmt.setInt(2, ID);
+        if (stmt.executeUpdate() != 0) {
+            System.out.println("Updated\n");
         }
     }
 
     public static void deleteExample() throws SQLException {
-        String sql = "DELETE FROM FlowersInStock WHERE ID=12";
-        System.out.println("Deleted: " + stmt.executeUpdate(sql));
+        Scanner input = new Scanner(System.in);
+        System.out.println("Please enter ID No.you want to delete record:");
+        int ID = input.nextInt();
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM FlowersInStock WHERE ID = ?");
+        stmt.setInt(1, ID);
+        if (stmt.executeUpdate() != 0) {
+            System.out.println("Deleted\n");
+        }
     }
 
     //public static void selectExample() throws SQLException {
@@ -46,14 +75,6 @@ public class DatabaseFlowers {
     //}
     //rs.close();
     //}
-
-
-    public static void updateExample() throws SQLException {
-        String sql = "UPDATE FlowersInStock\n" +
-                "SET Quantity = 101\n" +
-                "WHERE Type = 'Rose'";
-        System.out.println("Updated: " + stmt.executeUpdate(sql));
-    }
 
 
     public static void main(String[] args) {
