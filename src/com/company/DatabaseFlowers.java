@@ -17,7 +17,7 @@ public class DatabaseFlowers {
         String Type = input.next();
         System.out.println("Quantity in stock:");
         int Quantity = input.nextInt();
-        System.out.println("Price (EUR):");
+        System.out.println("Price (0,00 EUR):");
         double Price = input.nextDouble();
 
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO FlowersInStock(Type,Quantity,Price) values(?,?,?)");
@@ -31,22 +31,21 @@ public class DatabaseFlowers {
     }
 
     public static void deleteExample() throws SQLException {
-        String sql = "DELETE FROM FlowersInStock WHERE ID=7";
+        String sql = "DELETE FROM FlowersInStock WHERE ID=12";
         System.out.println("Deleted: " + stmt.executeUpdate(sql));
     }
 
     //public static void selectExample() throws SQLException {
-      //  String sql = "SELECT * FROM shoes WHERE ID=123";
-        //String sql = "SELECT * FROM FlowersInStock";
-        //ResultSet rs = stmt.executeQuery(sql);
+    //  String sql = "SELECT * FROM shoes WHERE ID=123";
+    //String sql = "SELECT * FROM FlowersInStock";
+    //ResultSet rs = stmt.executeQuery(sql);
 
-        //while (rs.next()) {
-        //  System.out.println(rs.getInt("ID") + " " + rs.getString("Type"));
-        //System.out.println(rs.getInt(1) + " " + rs.getString(2));
-        //}
-        //rs.close();
-        //}
-
+    //while (rs.next()) {
+    //  System.out.println(rs.getInt("ID") + " " + rs.getString("Type"));
+    //System.out.println(rs.getInt(1) + " " + rs.getString(2));
+    //}
+    //rs.close();
+    //}
 
 
     public static void updateExample() throws SQLException {
@@ -55,7 +54,6 @@ public class DatabaseFlowers {
                 "WHERE Type = 'Rose'";
         System.out.println("Updated: " + stmt.executeUpdate(sql));
     }
-
 
 
     public static void main(String[] args) {
@@ -68,31 +66,38 @@ public class DatabaseFlowers {
             //Create statement object
             stmt = conn.createStatement();
             Scanner input = new Scanner(System.in);
-            System.out.println("Press 1 - for deleting an entry from the database");
-            System.out.println("Press 2 - for inserting an entry into the database");
-            System.out.println("Press 3 - for updating an entry in the database");
-            int operation = input.nextInt();
-            switch (operation) {
-                case 1:
-                    deleteExample();
-                    break;
-                case 2:
-                    insertExample();
-                    break;
-                case 3:
-                    updateExample();
-                    break;
-                default:
-                    System.out.println("Invalid choice");
-                    break;
+            while (true) {
+                {
+                    System.out.println("Press 1 - for inserting an entry into the database");
+                    System.out.println("Press 2 - for updating an entry in the database");
+                    System.out.println("Press 3 - for deleting an entry from the database");
+                    System.out.println("Press 4 - for EXIT the database");
+                    int operation = input.nextInt();
+                    switch (operation) {
+                        case 1:
+                            insertExample();
+                            break;
+                        case 2:
+                            updateExample();
+                            break;
+                        case 3:
+                            deleteExample();
+                            break;
+                        case 4:
+                            System.exit(0);
+                            break;
+                        default:
+                            System.out.println("Invalid choice");
+                            break;
+                    }
+
+                    //selectExample();
+                    //insertExample();
+                    //updateExample();
+                    //deleteExample();
+                    //joinExample();
+                }
             }
-
-            //selectExample();
-            //insertExample();
-            //updateExample();
-            //deleteExample();
-            //joinExample();
-
         } catch (SQLException sqlException) {
             System.out.println("Error:" + sqlException.getMessage());
         } finally {
