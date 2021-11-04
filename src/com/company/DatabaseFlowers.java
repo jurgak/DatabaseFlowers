@@ -36,16 +36,17 @@ public class DatabaseFlowers {
     }
 
     //public static void selectExample() throws SQLException {
-    //String sql = "SELECT * FROM shoes WHERE ID=123";
-    //  String sql = "SELECT * FROM FlowersInStock";
-    //ResultSet rs = stmt.executeQuery(sql);
+      //  String sql = "SELECT * FROM shoes WHERE ID=123";
+        //String sql = "SELECT * FROM FlowersInStock";
+        //ResultSet rs = stmt.executeQuery(sql);
 
-    //while (rs.next()) {
-    //  System.out.println(rs.getInt("ID") + " " + rs.getString("Type"));
-    //System.out.println(rs.getInt(1) + " " + rs.getString(2));
-    //}
-    //rs.close();
-    //}
+        //while (rs.next()) {
+        //  System.out.println(rs.getInt("ID") + " " + rs.getString("Type"));
+        //System.out.println(rs.getInt(1) + " " + rs.getString(2));
+        //}
+        //rs.close();
+        //}
+
 
 
     public static void updateExample() throws SQLException {
@@ -54,6 +55,9 @@ public class DatabaseFlowers {
                 "WHERE Type = 'Rose'";
         System.out.println("Updated: " + stmt.executeUpdate(sql));
     }
+
+
+
     public static void main(String[] args) {
         try {
             ///Return connection instance
@@ -63,10 +67,29 @@ public class DatabaseFlowers {
 
             //Create statement object
             stmt = conn.createStatement();
-            System.out.println("Please choose desired action: s for Select");
+            Scanner input = new Scanner(System.in);
+            System.out.println("Press 1 - for deleting an entry from the database");
+            System.out.println("Press 2 - for inserting an entry into the database");
+            System.out.println("Press 3 - for updating an entry in the database");
+            int operation = input.nextInt();
+            switch (operation) {
+                case 1:
+                    deleteExample();
+                    break;
+                case 2:
+                    insertExample();
+                    break;
+                case 3:
+                    updateExample();
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+                    break;
+            }
+
             //selectExample();
             //insertExample();
-            updateExample();
+            //updateExample();
             //deleteExample();
             //joinExample();
 
@@ -81,5 +104,4 @@ public class DatabaseFlowers {
             }
         }
     }
-
 }
