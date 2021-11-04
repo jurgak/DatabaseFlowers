@@ -1,5 +1,7 @@
 package com.company;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.Scanner;
 
@@ -17,7 +19,7 @@ public class DatabaseFlowers {
         String Type = input.next();
         System.out.println("Quantity in stock:");
         int Quantity = input.nextInt();
-        System.out.println("Price (EUR):");
+        System.out.println("Price (0,00 EUR):");
         double Price = input.nextDouble();
 
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO FlowersInStock(Type,Quantity,Price) values(?,?,?)");
@@ -26,18 +28,55 @@ public class DatabaseFlowers {
         stmt.setDouble(3, Price);
 
         if (stmt.executeUpdate() != 0) {
-            System.out.println("Inserted");
+            System.out.println("Inserted\n");
         }
     }
 
+    public static void updateExample() throws SQLException {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Please enter ID No. you want to update quantity in stock:");
+        int ID = input.nextInt();
+        System.out.println("Update quantity in stock:");
+        int Quantity = input.nextInt();
+        //  TRYING TO ESCAPE NEGATIVE NUMBERS.
+        //  while (Quantity<0){
+        //    System.out.println("Incorrect. Try again:");
+        //  input.nextInt();
+        //Quantity = checkQuantity(); ???
+        //}
+
+        PreparedStatement stmt = conn.prepareStatement("UPDATE FlowersInStock SET Quantity = ? WHERE ID = ?");
+        stmt.setInt(1, Quantity);
+        stmt.setInt(2, ID);
+        if (stmt.executeUpdate() != 0) {
+            System.out.println("Updated\n");
+        }
+    }
     public static void deleteExample() throws SQLException {
-        String sql = "DELETE FROM FlowersInStock WHERE ID=7";
-        System.out.println("Deleted: " + stmt.executeUpdate(sql));
+        Scanner input = new Scanner(System.in);
+        System.out.println("Please enter ID No.you want to delete record:");
+        int ID = input.nextInt();
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM FlowersInStock WHERE ID = ?");
+        stmt.setInt(1, ID);
+        if (stmt.executeUpdate() != 0) {
+            System.out.println("Deleted\n");
+        }
     }
 
+    public static void joinExample() throws SQLException {
+        System.out.println("Here You can compare what is in Stock at the Moment and what is in the next Order Table:");
+        String sql = "SELECT o.Type,s.Quantity,o.DesiredQuantity FROM FlowersInStock s JOIN FlowerOrder o on s.Type=o.Type";
+        ResultSet rs = stmt.executeQuery(sql);
+
+        while (rs.next()) {
+            System.out.println(rs.getString("o.Type") + " "
+                    + rs.getInt("s.Quantity") + " " + rs.getInt("o.DesiredQuantity"));
+        }
+        rs.close();
+    }
     //public static void selectExample() throws SQLException {
-    //String sql = "SELECT * FROM shoes WHERE ID=123";
-    //  String sql = "SELECT * FROM FlowersInStock";
+    //  String sql = "SELECT * FROM shoes WHERE ID=123";
+    //String sql = "SELECT * FROM FlowersInStock";
     //ResultSet rs = stmt.executeQuery(sql);
 
     //while (rs.next()) {
@@ -47,13 +86,6 @@ public class DatabaseFlowers {
     //rs.close();
     //}
 
-
-    public static void updateExample() throws SQLException {
-        String sql = "UPDATE FlowersInStock\n" +
-                "SET Quantity = 101\n" +
-                "WHERE Type = 'Rose'";
-        System.out.println("Updated: " + stmt.executeUpdate(sql));
-    }
     public static void main(String[] args) {
         try {
             ///Return connection instance
@@ -63,13 +95,43 @@ public class DatabaseFlowers {
 
             //Create statement object
             stmt = conn.createStatement();
-            System.out.println("Please choose desired action: s for Select");
-            //selectExample();
-            //insertExample();
-            updateExample();
-            //deleteExample();
-            //joinExample();
+            Scanner input = new Scanner(System.in);
+            while (true) {
+                {
+                    System.out.println("Press 1 - for inserting an entry into the database");
+                    System.out.println("Press 2 - for updating an entry in the database");
+                    System.out.println("Press 3 - for deleting an entry from the database");
+                    System.out.println("Press 4 - for comparing Flower Quantities in Stock and in Order DB");
+                    System.out.println("Press 5 - for EXIT the database");
+                    int operation = input.nextInt();
+                    switch (operation) {
+                        case 1:
+                            insertExample();
+                            break;
+                        case 2:
+                            updateExample();
+                            break;
+                        case 3:
+                            deleteExample();
+                            break;
+                        case 4:
+                            joinExample();
+                            break;
+                        case 5:
+                            System.exit(0);
+                            break;
+                        default:
+                            System.out.println("Invalid choice");
+                            break;
+                    }
 
+                    //selectExample();
+                    //insertExample();
+                    //updateExample();
+                    //deleteExample();
+                    //joinExample();
+                }
+            }
         } catch (SQLException sqlException) {
             System.out.println("Error:" + sqlException.getMessage());
         } finally {
