@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class DatabaseFlowers {
     static final String DB_URL = "jdbc:mysql://group-2-database.ckfcq92zr1jy.eu-west-2.rds.amazonaws.com/Flowers";
+
     static Connection conn = null;
     static Statement stmt = null;
 
@@ -85,6 +86,7 @@ public class DatabaseFlowers {
         try {
             ///Return connection instance
 
+            Class.forName("com.mysql.jdbc.Driver");
             Scanner input = new Scanner(System.in);
             System.out.println("Enter your username:");
             String USER = input.next();
@@ -134,7 +136,7 @@ public class DatabaseFlowers {
                     //joinExample();
                 }
             }
-        } catch (SQLException sqlException) {
+        } catch (SQLException | ClassNotFoundException sqlException) {
             System.out.println("Error:" + sqlException.getMessage());
         } finally {
             try {
