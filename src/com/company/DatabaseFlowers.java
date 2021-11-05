@@ -1,15 +1,10 @@
 package com.company;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.Scanner;
 
 public class DatabaseFlowers {
     static final String DB_URL = "jdbc:mysql://group-2-database.ckfcq92zr1jy.eu-west-2.rds.amazonaws.com/Flowers";
-    //  Database credentials
-    static final String USER = "admin";
-    static final String PASS = "Riga1234";
     static Connection conn = null;
     static Statement stmt = null;
 
@@ -38,12 +33,11 @@ public class DatabaseFlowers {
         int ID = input.nextInt();
         System.out.println("Update quantity in stock:");
         int Quantity = input.nextInt();
-        //  TRYING TO ESCAPE NEGATIVE NUMBERS.
-        //  while (Quantity<0){
-        //    System.out.println("Incorrect. Try again:");
+        //if (QuantityTemp < 0) {
+        // System.out.println("Quantity cannot be negative. Try again:");
         //  input.nextInt();
-        //Quantity = checkQuantity(); ???
         //}
+
 
         PreparedStatement stmt = conn.prepareStatement("UPDATE FlowersInStock SET Quantity = ? WHERE ID = ?");
         stmt.setInt(1, Quantity);
@@ -52,6 +46,7 @@ public class DatabaseFlowers {
             System.out.println("Updated\n");
         }
     }
+
     public static void deleteExample() throws SQLException {
         Scanner input = new Scanner(System.in);
         System.out.println("Please enter ID No.you want to delete record:");
@@ -69,8 +64,8 @@ public class DatabaseFlowers {
         ResultSet rs = stmt.executeQuery(sql);
 
         while (rs.next()) {
-            System.out.println(rs.getString("o.Type") + " "
-                    + rs.getInt("s.Quantity") + " " + rs.getInt("o.DesiredQuantity"));
+            System.out.println(rs.getString("o.Type") + " quantity in stock: "
+                    + rs.getInt("s.Quantity") + ". Quantity you are ordering: " + rs.getInt("o.DesiredQuantity"));
         }
         rs.close();
     }
@@ -89,13 +84,20 @@ public class DatabaseFlowers {
     public static void main(String[] args) {
         try {
             ///Return connection instance
+
+            Scanner input = new Scanner(System.in);
+            System.out.println("Enter your username:");
+            String USER = input.next();
+            System.out.println("Enter your password:");
+            String PASS = input.next();
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
             System.out.println("Creating statement...");
 
             //Create statement object
             stmt = conn.createStatement();
-            Scanner input = new Scanner(System.in);
+            //Scanner input = new Scanner(System.in);
             while (true) {
                 {
                     System.out.println("Press 1 - for inserting an entry into the database");
