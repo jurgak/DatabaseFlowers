@@ -52,7 +52,6 @@ public class DatabaseFlowers {
             System.out.println("Updated\n");
         }
     }
-
     public static void deleteExample() throws SQLException {
         Scanner input = new Scanner(System.in);
         System.out.println("Please enter ID No.you want to delete record:");
@@ -64,6 +63,17 @@ public class DatabaseFlowers {
         }
     }
 
+    public static void joinExample() throws SQLException {
+        System.out.println("Here You can compare what is in Stock at the Moment and what is in the next Order Table:");
+        String sql = "SELECT o.Type,s.Quantity,o.DesiredQuantity FROM FlowersInStock s JOIN FlowerOrder o on s.Type=o.Type";
+        ResultSet rs = stmt.executeQuery(sql);
+
+        while (rs.next()) {
+            System.out.println(rs.getString("o.Type") + " "
+                    + rs.getInt("s.Quantity") + " " + rs.getInt("o.DesiredQuantity"));
+        }
+        rs.close();
+    }
     //public static void selectExample() throws SQLException {
     //  String sql = "SELECT * FROM shoes WHERE ID=123";
     //String sql = "SELECT * FROM FlowersInStock";
@@ -75,7 +85,6 @@ public class DatabaseFlowers {
     //}
     //rs.close();
     //}
-
 
     public static void main(String[] args) {
         try {
@@ -92,7 +101,8 @@ public class DatabaseFlowers {
                     System.out.println("Press 1 - for inserting an entry into the database");
                     System.out.println("Press 2 - for updating an entry in the database");
                     System.out.println("Press 3 - for deleting an entry from the database");
-                    System.out.println("Press 4 - for EXIT the database");
+                    System.out.println("Press 4 - for comparing Flower Quantities in Stock and in Order DB");
+                    System.out.println("Press 5 - for EXIT the database");
                     int operation = input.nextInt();
                     switch (operation) {
                         case 1:
@@ -105,6 +115,9 @@ public class DatabaseFlowers {
                             deleteExample();
                             break;
                         case 4:
+                            joinExample();
+                            break;
+                        case 5:
                             System.exit(0);
                             break;
                         default:
@@ -130,4 +143,5 @@ public class DatabaseFlowers {
             }
         }
     }
+
 }
