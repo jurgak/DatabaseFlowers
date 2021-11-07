@@ -5,8 +5,6 @@ import java.util.Scanner;
 public class FlowerOrder {
     static final String DB_URL = "jdbc:mysql://group-2-database.ckfcq92zr1jy.eu-west-2.rds.amazonaws.com/Flowers";
     //  Database credentials
-    static final String USER = "admin";
-    static final String PASS = "Riga1234";
     static Connection conn = null;
     static Statement stmt = null;
     public static void insert() throws SQLException {
@@ -29,6 +27,11 @@ public class FlowerOrder {
     public static void main(String[] args) {
         try {
             ///Return connection instance
+            Scanner input = new Scanner(System.in);
+            System.out.println("Enter your username:");
+            String USER = input.next();
+            System.out.println("Enter your password:");
+            String PASS = input.next();
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("Creating statement...");
