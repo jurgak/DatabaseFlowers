@@ -49,19 +49,21 @@ public class DatabaseFlowers {
     }
 
     static int checkValidity (Scanner input) {
-        if (input.nextInt() < 0) {
-        System.out.println("Quantity cannot be negative. Try again:");
-        //input.nextInt();
-        }
-        return input.nextInt();
-    }
+           int QuantityCheck = input.nextInt();
+           while (QuantityCheck<0){
+               System.out.println("Quantity cannot be negative. Try again:");
+               QuantityCheck = input.nextInt();
+           }
+           return QuantityCheck;
+            }
 
     static double checkValidityPrice (Scanner input) {
-        if (input.nextDouble() < 0) {
-            System.out.println("Price cannot be negative. Try again:");
-            //input.nextInt();
-        }
-        return input.nextDouble();
+       double PriceCheck = input.nextDouble();
+       while (PriceCheck<=0){
+           System.out.println("Price cannot be negative. Try again:");
+           PriceCheck = input.nextDouble();
+       }
+       return PriceCheck;
     }
 
     public static void deleteExample() throws SQLException {
