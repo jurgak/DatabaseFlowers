@@ -14,9 +14,9 @@ public class DatabaseFlowers {
         System.out.println("Flower Type:");
         String Type = input.next();
         System.out.println("Quantity in stock:");
-        int Quantity = input.nextInt();
+        int Quantity = checkValidity(input);
         System.out.println("Price (0,00 EUR):");
-        double Price = input.nextDouble();
+        double Price = checkValidityPrice(input);
 
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO FlowersInStock(Type,Quantity,Price) values(?,?,?)");
         stmt.setString(1, Type);
@@ -33,7 +33,7 @@ public class DatabaseFlowers {
         System.out.println("Please enter ID No. you want to update quantity in stock:");
         int ID = input.nextInt();
         System.out.println("Update quantity in stock:");
-        int Quantity = input.nextInt();
+        int Quantity = checkValidity(input);
         //if (QuantityTemp < 0) {
         // System.out.println("Quantity cannot be negative. Try again:");
         //  input.nextInt();
@@ -46,6 +46,22 @@ public class DatabaseFlowers {
         if (stmt.executeUpdate() != 0) {
             System.out.println("Updated\n");
         }
+    }
+
+    static int checkValidity (Scanner input) {
+        if (input.nextInt() < 0) {
+        System.out.println("Quantity cannot be negative. Try again:");
+        //input.nextInt();
+        }
+        return input.nextInt();
+    }
+
+    static double checkValidityPrice (Scanner input) {
+        if (input.nextDouble() < 0) {
+            System.out.println("Price cannot be negative. Try again:");
+            //input.nextInt();
+        }
+        return input.nextDouble();
     }
 
     public static void deleteExample() throws SQLException {
@@ -86,7 +102,6 @@ public class DatabaseFlowers {
         try {
             ///Return connection instance
 
-            Class.forName("com.mysql.jdbc.Driver");
             Scanner input = new Scanner(System.in);
             System.out.println("Enter your username:");
             String USER = input.next();
@@ -136,7 +151,7 @@ public class DatabaseFlowers {
                     //joinExample();
                 }
             }
-        } catch (SQLException | ClassNotFoundException sqlException) {
+        } catch (SQLException sqlException) {
             System.out.println("Error:" + sqlException.getMessage());
         } finally {
             try {
